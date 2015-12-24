@@ -1,4 +1,5 @@
 # hubot-where-am-i
+[![Build Status](https://img.shields.io/travis/johnkchiu/hubot-where-am-i/master.svg?style=flat-square)](https://travis-ci.org/johnkchiu/hubot-where-am-i)
 
 Hubot for tracking OOO, WFH, PTO, etc.
 
