@@ -1,8 +1,8 @@
 # hubot-where-am-i
 
-Hubot for tracking OOO, WFH, etc.
+Hubot for tracking OOO, WFH, PTO, etc.
 
-See [`src/where-am-i.coffee`](src/where-am-i.coffee) for full documentation.
+See [`src/where-am-i.js`](src/where-am-i.js) for full documentation.
 
 ## Installation
 
