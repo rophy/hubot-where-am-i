@@ -3,6 +3,9 @@
 module.exports = function (grunt) {
 
     grunt.initConfig({
+        eslint: {
+            target: ['.']
+        },
         mochaTest: {
             test: {
                 options: {
@@ -27,7 +30,8 @@ module.exports = function (grunt) {
     // load all grunt tasks
     require('matchdep').filterDev(['grunt-*', '!grunt-cli']).forEach(grunt.loadNpmTasks);
 
+    grunt.registerTask('lint', ['eslint']);
     grunt.registerTask('test', ['mochaTest']);
     grunt.registerTask('test:watch', ['watch']);
-    grunt.registerTask('default', ['test']);
+    grunt.registerTask('default', ['lint', 'test']);
 };
