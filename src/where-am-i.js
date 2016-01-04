@@ -73,7 +73,7 @@ module.exports = function (robot) {
     }
 
     function formatDisplay(obj) {
-        return '*[' + obj.date + ']* *' + obj.user + '* is _' + obj.reason + '... ' + obj.message + '_';
+        return '*[' + obj.date + ']* *' + obj.user + '* is _' + obj.reason + ' ' + obj.message + '..._';
     }
 
     // Handles `(wfh|pto|ooo) <date> <message>`
@@ -83,11 +83,11 @@ module.exports = function (robot) {
         var date = resolveDate(res.match[2]);   // moment object
         var message = resolveMessage(res.match[2]);
 
-        robot.logger.info('** SET: [user=%s] [reason=%s] [date=%s] [message=%s]', user, reason, date.format(), message);
+        robot.logger.debug('** SET: [user=%s] [reason=%s] [date=%s] [message=%s]', user, reason, date.format(), message);
 
         // if invalid date
         if (!date.isValid()) {
-            return res.send('Invalid <date> format.  It can be `today`, `tomorrow` or `MM/DD/YYYY`.');
+            return res.reply('Invalid <date> format.  It can be `today`, `tomorrow` or `MM/DD/YYYY`.');
         }
 
         // get and append data
@@ -101,8 +101,8 @@ module.exports = function (robot) {
         data[date.format('MM/DD/YYYY')] = newData;
         robot.brain.set(user, data);
 
-        res.send('Gotcha!');
-        res.send(formatDisplay(newData));
+        res.reply('Gotcha!');
+        res.reply(formatDisplay(newData));
     });
 
     // Handles `clear <date>`
@@ -115,11 +115,11 @@ module.exports = function (robot) {
 
         _.forEach(data, function (obj) {
             found = true;
-            res.send(formatDisplay(obj));
+            res.reply(formatDisplay(obj));
         });
 
         if (!found) {
-            res.send('I have no information for you.');
+            res.reply('I have no information for you.');
         }
     });
 
@@ -130,11 +130,11 @@ module.exports = function (robot) {
         var data = robot.brain.get(user) || {};
         _.forEach(data, function (obj) {
             found = true;
-            res.send(formatDisplay(obj));
+            res.reply(formatDisplay(obj));
         });
 
         if (!found) {
-            res.send('I have no information for you.');
+            res.reply('I have no information for you.');
         }
     });
 
@@ -146,12 +146,12 @@ module.exports = function (robot) {
 
         // if invalid user
         if (!users) {
-            return res.send('Invalid <user> format.  It can be `everyone` or `@<username`.');
+            return res.reply('Invalid <user> format.  It can be `everyone` or `@<username`.');
         }
 
         // if invalid date
         if (!date.isValid()) {
-            return res.send('Invalid <date> format.  It can be `today`, `tomorrow` or `MM/DD/YYYY`.');
+            return res.reply('Invalid <date> format.  It can be `today`, `tomorrow` or `MM/DD/YYYY`.');
         }
 
         robot.logger.info('** GET: [users=%s]', users);
@@ -162,12 +162,12 @@ module.exports = function (robot) {
             var data = robot.brain.get(user) || {};
             _.forEach(data, function (obj) {
                 found = true;
-                res.send(formatDisplay(obj));
+                res.reply(formatDisplay(obj));
             });
         });
 
         if (!found) {
-            res.send('I have no information for ' + res.match[1] + '.');
+            res.reply('I have no information for ' + res.match[1] + '.');
         }
     });
 
