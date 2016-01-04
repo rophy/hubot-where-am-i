@@ -105,13 +105,34 @@ module.exports = function (robot) {
         res.send(formatDisplay(newData));
     });
 
+    // Handles `clear <date>`
+    robot.respond(/clear[\s]*([^\s]*)/i, function (res) {
+        var found = false;
+        var user = res.message.user.name;
+        var data = robot.brain.get(user) || {};
+
+        // FIXME: (jchiu) Need to match by <date>!
+
+        _.forEach(data, function (obj) {
+            found = true;
+            res.send(formatDisplay(obj));
+        });
+
+    });
+
     // Handles `where am i`
     robot.respond(/where am i/i, function (res) {
+        var found = false;
         var user = res.message.user.name;
         var data = robot.brain.get(user) || {};
         _.forEach(data, function (obj) {
+            found = true;
             res.send(formatDisplay(obj));
         });
+
+        if (!found) {
+            res.send('I have no information for you.');
+        }
     });
 
     // Handles `where is <user> <date>`
@@ -131,6 +152,8 @@ module.exports = function (robot) {
         }
 
         robot.logger.info('** GET: [users=%s]', users);
+
+        // FIXME: (jchiu) Need to match by <date>!
 
         _.forEach(users, function (user) {
             var data = robot.brain.get(user) || {};
