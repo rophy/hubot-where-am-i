@@ -118,6 +118,9 @@ module.exports = function (robot) {
             res.send(formatDisplay(obj));
         });
 
+        if (!found) {
+            res.send('I have no information for you.');
+        }
     });
 
     // Handles `where am i`
