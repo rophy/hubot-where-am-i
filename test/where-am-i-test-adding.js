@@ -21,6 +21,7 @@ describe('where-am-i handles *hubot (ooo|wfh|pto) <date> <message>* command', fu
             expect(util.getLastResponse(room)).to.deep.equal(
                 [ 'hubot', '@johnkchiu *['+util.today+']* *johnkchiu* is _OOO ..._' ]
             );
+            expect(room.robot.brain.get('johnkchiu')[util.today]).is.not.empty;
         });
     });
 
@@ -29,6 +30,7 @@ describe('where-am-i handles *hubot (ooo|wfh|pto) <date> <message>* command', fu
             expect(util.getLastResponse(room)).to.deep.equal(
                 [ 'hubot', '@johnkchiu *['+util.today+']* *johnkchiu* is _OOO ..._' ]
             );
+            expect(room.robot.brain.get('johnkchiu')[util.today]).is.not.empty;
         });
     });
 
@@ -37,6 +39,7 @@ describe('where-am-i handles *hubot (ooo|wfh|pto) <date> <message>* command', fu
             expect(util.getLastResponse(room)).to.deep.equal(
                 [ 'hubot', '@johnkchiu *['+util.today+']* *johnkchiu* is _OOO because some reason..._' ]
             );
+            expect(room.robot.brain.get('johnkchiu')[util.today]).is.not.empty;
         });
     });
 
@@ -45,6 +48,7 @@ describe('where-am-i handles *hubot (ooo|wfh|pto) <date> <message>* command', fu
             expect(util.getLastResponse(room)).to.deep.equal(
                 [ 'hubot', '@johnkchiu *['+util.tomorrow+']* *johnkchiu* is _OOO ..._' ]
             );
+            expect(room.robot.brain.get('johnkchiu')[util.tomorrow]).is.not.empty;
         });
     });
 
@@ -53,6 +57,7 @@ describe('where-am-i handles *hubot (ooo|wfh|pto) <date> <message>* command', fu
             expect(util.getLastResponse(room)).to.deep.equal(
                 [ 'hubot', '@johnkchiu *[12/31/2016]* *johnkchiu* is _OOO ..._' ]
             );
+            expect(room.robot.brain.get('johnkchiu')['12/31/2016']).is.not.empty;
         });
     });
 
@@ -61,6 +66,7 @@ describe('where-am-i handles *hubot (ooo|wfh|pto) <date> <message>* command', fu
             expect(util.getLastResponse(room)).to.deep.equal(
                 [ 'hubot', '@johnkchiu *['+util.today+']* *johnkchiu* is _WFH ..._' ]
             );
+            expect(room.robot.brain.get('johnkchiu')[util.today]).is.not.empty;
         });
     });
 
@@ -69,6 +75,7 @@ describe('where-am-i handles *hubot (ooo|wfh|pto) <date> <message>* command', fu
             expect(util.getLastResponse(room)).to.deep.equal(
                 [ 'hubot', '@johnkchiu *['+util.today+']* *johnkchiu* is _PTO ..._' ]
             );
+            expect(room.robot.brain.get('johnkchiu')[util.today]).is.not.empty;
         });
     });
 
