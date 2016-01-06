@@ -101,7 +101,6 @@ module.exports = function (robot) {
         data[date.format('MM/DD/YYYY')] = newData;
         robot.brain.set(user, data);
 
-        res.reply('Gotcha!');
         res.reply(formatDisplay(newData));
     });
 
