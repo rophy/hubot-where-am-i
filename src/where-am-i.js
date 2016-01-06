@@ -108,13 +108,18 @@ module.exports = function (robot) {
     robot.respond(/clear[\s]*([^\s]*)/i, function (res) {
         var found = false;
         var user = res.message.user.name;
+        var date = resolveDate(res.match[1]);   // moment object
         var data = robot.brain.get(user) || {};
 
-        // FIXME: (jchiu) Need to match by <date>!
-
         _.forEach(data, function (obj) {
-            found = true;
-            res.reply(formatDisplay(obj));
+            if (obj.date === date.format('MM/DD/YYYY')) {
+                found = true;
+                // delete from brain
+                data = _.omit(data, date.format('MM/DD/YYYY'));
+                robot.brain.set(user, data);
+                // reply
+                res.reply('~'+formatDisplay(obj)+'~');
+            }
         });
 
         if (!found) {
@@ -155,13 +160,13 @@ module.exports = function (robot) {
 
         robot.logger.info('** GET: [users=%s]', users);
 
-        // FIXME: (jchiu) Need to match by <date>!
-
         _.forEach(users, function (user) {
             var data = robot.brain.get(user) || {};
             _.forEach(data, function (obj) {
-                found = true;
-                res.reply(formatDisplay(obj));
+                if (obj.date === date.format('MM/DD/YYYY')) {
+                    found = true;
+                    res.reply(formatDisplay(obj));
+                }
             });
         });
 
