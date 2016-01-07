@@ -19,9 +19,37 @@ Then add **hubot-where-am-i** to your `external-scripts.json`:
 ]
 ```
 
+### Commands
+
+```
+//   _<date>_ - It can be `today`, `tomorrow` or `MM/DD/YYYY`.  Defaults to `today`.
+//   _<user>_ - It can be `everyone` or `@<username`.
+//   *hubot (OOO|WFH|PTO) <date> <message>* - Sets your out of office.  <date> and <message> are optional.
+//   *hubot clear <date>*                   - Clears your out of office.  <date> is optional.
+//   *hubot where am i*                     - Prints your out of office dates.
+//   *hubot where is <user> <date>*         - Prints <person>'s out of office.  <date> is optional.
+```
+
 ## Sample Interaction
 
 ```
-user1>> hubot hello
-hubot>> hello!
+user1>> OOO
+hubot>> [01/07/2016] user1​ is ​OOO ...​
+
+user1>> OOO tomorrow
+hubot>> [01/08/2016] user1​ is ​OOO ...
+
+user1>> OOOO 1/30/2016 because I don’t feel so good.
+hubot>> [01/30/2016] user1 is OOO because I don’t feel so good....
+
+user1>> where am i
+hubot>> [01/07/2016] user1​ is ​OOO ...
+hubot>> [01/08/2016]​ user1​ is ​OOO ...
+hubot>> [01/30/2016] user1​ is ​OOO because I don’t feel so good....
+
+user1>> clear today
+hubot>> ~[01/07/2016] user1​ is ​OOO ...~
+
+user2>> where is @user1 tomorrow
+hubot>> [01/08/2016]​ user1​ is ​OOO ...
 ```
