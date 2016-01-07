@@ -38,8 +38,8 @@ module.exports = {
             return _.map(robot.brain.users(), 'name');
         }
 
-        if (str.match(/@/i)) {
-            // FIXME: (jchiu) ...
+        if (str.match(/@(.*)/i)) {
+            return [ str.substr(1) ];
         }
 
         // not supported format

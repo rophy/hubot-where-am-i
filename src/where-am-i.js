@@ -12,10 +12,10 @@
 // Commands:
 //   _<date>_ - It can be `today`, `tomorrow` or `MM/DD/YYYY`.  Defaults to `today`.
 //   _<user>_ - It can be `everyone` or `@<username`.
-//   *hubot (ooo|wfh|pto) <date> <message>* - Sets your out of office.  <date> and <message> are optional.
-//   *hubot clear <date>* - Clears your out of office.  <date> is optional.
-//   *hubot where am i* - Prints your out of office dates.
-//   *hubot where is <user> <date>* - Prints <person>'s out of office.  <date> is optional.
+//   *hubot (OOO|WFH|PTO) <date> <message>* - Sets your out of office.  <date> and <message> are optional.
+//   *hubot clear <date>*                   - Clears your out of office.  <date> is optional.
+//   *hubot where am i*                     - Prints your out of office dates.
+//   *hubot where is <user> <date>*         - Prints <person>'s out of office.  <date> is optional.
 //
 // Notes:
 //   <optional notes required for the script>
@@ -82,6 +82,7 @@ module.exports = function (robot) {
         var found = false;
         var user = res.message.user.name;
         var data = robot.brain.get(user) || {};
+
         _.forEach(data, function (obj) {
             found = true;
             res.reply(formatDisplay(obj));
@@ -108,7 +109,7 @@ module.exports = function (robot) {
             return res.reply('Invalid <date> format.  It can be `today`, `tomorrow` or `MM/DD/YYYY`.');
         }
 
-        robot.logger.info('** GET: [users=%s]', users);
+        robot.logger.debug('** GET: [users=%s]', users);
 
         _.forEach(users, function (user) {
             var data = robot.brain.get(user) || {};

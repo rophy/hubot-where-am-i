@@ -16,14 +16,6 @@ describe('where-am-i handles *hubot clear <date>* command', function () {
         room.destroy();
     });
 
-    // it('should respond in order', function () {
-    //     return room.user.say('user1', '@hubot OOO')
-    //         .then(room.user.say('user2', '@hubot OOO'))
-    //         .then(function () {
-    //             console.log(room.messages);
-    //         });
-    // });
-
     context('user has added OOO', function () {
         beforeEach(function() {
             return room.user.say('johnkchiu', '@hubot OOO')
@@ -82,5 +74,6 @@ describe('where-am-i handles *hubot clear <date>* command', function () {
                 );
             });
         });
+
     });
 });
