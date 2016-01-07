@@ -26,51 +26,10 @@
 'use strict';
 
 var _ = require('lodash');
-var moment = require('moment');
+var params = require('../util/params');
+var brain = require('../util/brain');
 
 module.exports = function (robot) {
-
-    var DATE_REGEX = /today|tomorrow|[\d]+\/[\d]+\/[\d]+/i;
-
-    function resolveDate(str) {
-        var dateStr = str.match(DATE_REGEX);
-
-        // default to today if no match
-        if (!dateStr) {
-            return moment().startOf('day');
-        }
-
-        // match 'today'
-        if (dateStr[0].toLowerCase() === 'today') {
-            return moment().startOf('day');
-        }
-
-        // match 'tomorrow'
-        if (dateStr[0].toLowerCase() === 'tomorrow') {
-            return moment().startOf('day').add(1, 'days');
-        }
-
-        // else use moments to parse XX/XX/XXXX format
-        return moment(dateStr, 'MM-DD-YYYY');
-    }
-
-    function resolveMessage(str) {
-        // remove any date and spaces
-        return str.replace(DATE_REGEX, '').trim();
-    }
-
-    function resolveUser(str) {
-        if (str.toLowerCase() === 'everyone') {
-            return _.map(robot.brain.users(), 'name');
-        }
-
-        if (str.match(/@/i)) {
-            // FIXME: (jchiu) ...
-        }
-
-        // not supported format
-        return null;
-    }
 
     function formatDisplay(obj) {
         return '*[' + obj.date + ']* *' + obj.user + '* is _' + obj.reason + ' ' + obj.message + '..._';
@@ -80,8 +39,8 @@ module.exports = function (robot) {
     robot.respond(/(wfh|pto|ooo)[\s]*(.*)/i, function (res) {
         var user = res.message.user.name;
         var reason = res.match[1].toUpperCase();
-        var date = resolveDate(res.match[2]);   // moment object
-        var message = resolveMessage(res.match[2]);
+        var date = params.resolveDate(res.match[2]);   // moment object
+        var message = params.resolveMessage(res.match[2]);
 
         robot.logger.debug('** SET: [user=%s] [reason=%s] [date=%s] [message=%s]', user, reason, date.format(), message);
 
@@ -91,32 +50,23 @@ module.exports = function (robot) {
         }
 
         // get and append data
-        var data = robot.brain.get(user) || {};
-        var newData = {
-            user: user,
-            date: date.format('MM/DD/YYYY'),
-            reason: reason,
-            message: message
-        };
-        data[date.format('MM/DD/YYYY')] = newData;
-        robot.brain.set(user, data);
+        brain.add(robot, user, date, reason, message);
 
-        res.reply(formatDisplay(newData));
+        res.reply(formatDisplay( brain.get(robot, user, date) ));
     });
 
     // Handles `clear <date>`
     robot.respond(/clear[\s]*([^\s]*)/i, function (res) {
         var found = false;
         var user = res.message.user.name;
-        var date = resolveDate(res.match[1]);   // moment object
+        var date = params.resolveDate(res.match[1]);   // moment object
         var data = robot.brain.get(user) || {};
 
         _.forEach(data, function (obj) {
             if (obj.date === date.format('MM/DD/YYYY')) {
                 found = true;
                 // delete from brain
-                data = _.omit(data, date.format('MM/DD/YYYY'));
-                robot.brain.set(user, data);
+                brain.remove(robot, user, date);
                 // reply
                 res.reply('~'+formatDisplay(obj)+'~');
             }
@@ -145,8 +95,8 @@ module.exports = function (robot) {
     // Handles `where is <user> <date>`
     robot.respond(/where is[\s]*([^\s]*)[\s]*([^\s]*)/i, function (res) {
         var found = false;
-        var users = resolveUser(res.match[1]);
-        var date = resolveDate(res.match[2]);
+        var users = params.resolveUser(res.match[1], robot);
+        var date = params.resolveDate(res.match[2]);
 
         // if invalid user
         if (!users) {
