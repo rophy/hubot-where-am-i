@@ -10,12 +10,12 @@
 //   LIST_OF_ENV_VARS_TO_SET
 //
 // Commands:
-//   _<date>_ - It can be `today`, `tomorrow` or `MM/DD/YYYY`.  Defaults to `today`.
+//   _<date>_ - It can be `today`, `tomorrow` or `MM/DD/YYYY`..
 //   _<user>_ - It can be `everyone` or `@<username`.
-//   *hubot (OOO|WFH|PTO) <date> <message>* - Sets your out of office.  <date> and <message> are optional.
-//   *hubot clear <date>*                   - Clears your out of office.  <date> is optional.
-//   *hubot where am i*                     - Prints your out of office dates.
-//   *hubot where is <user> <date>*         - Prints <person>'s out of office.  <date> is optional.
+//   *hubot OOO|WFH|PTO <date> <message>* - Sets your out of office.  <date> is optional and defaults to `today`.  <message> are optional.
+//   *hubot clear <date>* - Clears your out of office.  <date> is optional and defaults to `today`.
+//   *hubot where am i* - Prints your out of office dates.
+//   *hubot where is <user> <date>* - Prints <user>'s out of office.  <date> is optional and defaults to all dates.
 //
 // Notes:
 //   <optional notes required for the script>
@@ -39,7 +39,7 @@ module.exports = function (robot) {
     robot.respond(/(wfh|pto|ooo)[\s]*(.*)/i, function (res) {
         var user = res.message.user.name;
         var reason = res.match[1].toUpperCase();
-        var date = params.resolveDate(res.match[2]);   // moment object
+        var date = params.resolveDate(res.match[2]) || params.today();
         var message = params.resolveMessage(res.match[2]);
 
         robot.logger.debug('** SET: [user=%s] [reason=%s] [date=%s] [message=%s]', user, reason, date.format(), message);
@@ -59,7 +59,7 @@ module.exports = function (robot) {
     robot.respond(/clear[\s]*([^\s]*)/i, function (res) {
         var found = false;
         var user = res.message.user.name;
-        var date = params.resolveDate(res.match[1]);   // moment object
+        var date = params.resolveDate(res.match[1]) || params.today();
         var data = robot.brain.get(user) || {};
 
         _.forEach(data, function (obj) {
@@ -95,9 +95,9 @@ module.exports = function (robot) {
 
     // Handles `where is <user> <date>`
     robot.respond(/where is[\s]*([^\s]*)[\s]*([^\s]*)/i, function (res) {
-        var found = false;
         var users = params.resolveUser(res.match[1], robot);
         var date = params.resolveDate(res.match[2]);
+        var response = [];
 
         // if invalid user
         if (!users) {
@@ -105,7 +105,7 @@ module.exports = function (robot) {
         }
 
         // if invalid date
-        if (!date.isValid()) {
+        if (date && !date.isValid()) {
             return res.reply('Invalid <date> format.  It can be `today`, `tomorrow` or `MM/DD/YYYY`.');
         }
 
@@ -114,14 +114,19 @@ module.exports = function (robot) {
         _.forEach(users, function (user) {
             var data = robot.brain.get(user) || {};
             _.forEach(data, function (obj) {
-                if (obj.date === date.format('MM/DD/YYYY')) {
-                    found = true;
-                    res.reply(formatDisplay(obj));
+                if (!date || obj.date === date.format('MM/DD/YYYY')) {
+                    response.push(formatDisplay(obj));
+                    // found = true;
+                    // res.reply(formatDisplay(obj));
                 }
             });
         });
 
-        if (!found) {
+        if (response.length) {
+            _.forEach(response.sort(), function(line) {
+                res.reply(line);
+            });
+        } else {
             res.reply('I have no information for ' + res.match[1] + '.');
         }
     });

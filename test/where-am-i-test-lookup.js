@@ -5,9 +5,6 @@ var Helper = require('hubot-test-helper');
 var helper = new Helper('../src');
 var util = require('./util');
 
-//   *hubot where am i*                     - Prints your out of office dates.
-//   *hubot where is <user> <date>*         - Prints <person>'s out of office.  <date> is optional.
-
 describe('where-am-i handles *hubot where am i* or *hubot where is <user> <date>* command', function () {
     var room;
 
@@ -22,8 +19,8 @@ describe('where-am-i handles *hubot where am i* or *hubot where is <user> <date>
     context('user has added OOO', function () {
         beforeEach(function() {
             return room.user.say('user1', '@hubot OOO')
-                .then(room.user.say('user2', '@hubot OOO'))
                 .then(room.user.say('user2', '@hubot OOO tomorrow'))
+                .then(room.user.say('user2', '@hubot OOO'))
                 .then(room.user.say('user2', '@hubot OOO 12/31/2016'));
         });
 
@@ -37,9 +34,11 @@ describe('where-am-i handles *hubot where am i* or *hubot where is <user> <date>
 
         it('should find for "where is <user>"', function () {
             return room.user.say('user1', '@hubot where is @user2').then(function () {
-                expect(util.getLastResponse(room)).to.deep.equal(
-                    [ 'hubot', '@user1 *['+util.today+']* *user2* is _OOO ..._' ]
-                );
+                expect(room.messages.slice(-3)).to.deep.equal([
+                    [ 'hubot', '@user1 *['+util.today+']* *user2* is _OOO ..._' ],
+                    [ 'hubot', '@user1 *['+util.tomorrow+']* *user2* is _OOO ..._' ],
+                    [ 'hubot', '@user1 *[12/31/2016]* *user2* is _OOO ..._' ]
+                ]);
             });
         });
 
@@ -51,18 +50,18 @@ describe('where-am-i handles *hubot where am i* or *hubot where is <user> <date>
             });
         });
 
-        it('should find for "where is <user> 12/31/2016" (specific date)', function () {
-            return room.user.say('user1', '@hubot where is @user2 12/31/2016').then(function () {
-                expect(util.getLastResponse(room)).to.deep.equal(
-                    [ 'hubot', '@user1 *[12/31/2016]* *user2* is _OOO ..._' ]
-                );
-            });
-        });
-
         it('should find for "where is <user> tomorrow"', function () {
             return room.user.say('user1', '@hubot where is @user2 tomorrow').then(function () {
                 expect(util.getLastResponse(room)).to.deep.equal(
                     [ 'hubot', '@user1 *['+util.tomorrow+']* *user2* is _OOO ..._' ]
+                );
+            });
+        });
+
+        it('should find for "where is <user> 12/31/2016" (specific date)', function () {
+            return room.user.say('user1', '@hubot where is @user2 12/31/2016').then(function () {
+                expect(util.getLastResponse(room)).to.deep.equal(
+                    [ 'hubot', '@user1 *[12/31/2016]* *user2* is _OOO ..._' ]
                 );
             });
         });

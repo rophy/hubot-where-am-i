@@ -6,22 +6,30 @@ var DATE_REGEX = /today|tomorrow|[\d]+\/[\d]+\/[\d]+/i;
 
 module.exports = {
 
+    today: function today() {
+        return moment().startOf('day');
+    },
+
+    tomorrow: function tomorrow() {
+        return moment().startOf('day').add(1, 'days');
+    },
+
     resolveDate: function resolveDate(str) {
         var dateStr = str.match(DATE_REGEX);
 
-        // default to today if no match
+        // no date found
         if (!dateStr) {
-            return moment().startOf('day');
+            return null;
         }
 
         // match 'today'
         if (dateStr[0].toLowerCase() === 'today') {
-            return moment().startOf('day');
+            return this.today();
         }
 
         // match 'tomorrow'
         if (dateStr[0].toLowerCase() === 'tomorrow') {
-            return moment().startOf('day').add(1, 'days');
+            return this.tomorrow();
         }
 
         // else use moments to parse XX/XX/XXXX format
