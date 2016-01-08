@@ -1,7 +1,7 @@
 {
   "name": "hubot-where-am-i",
   "description": "Hubot for tracking OOO, WFH, etc.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": " <johnkchiu@yahoo.com>",
   "license": "MIT",
   "keywords": "hubot, hubot-scripts",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "lodash": "^3.10.1",
-    "moment": "^2.10.6"
+    "moment": "^2.11.0"
   },
   "peerDependencies": {
     "hubot": "2.x"

@@ -19,6 +19,7 @@ describe('where-am-i handles *hubot where am i* or *hubot where is <user> <date>
     context('user has added OOO', function () {
         beforeEach(function() {
             return room.user.say('user1', '@hubot OOO')
+                .then(room.user.say('user2', '@hubot OOO 1/1/2000'))
                 .then(room.user.say('user2', '@hubot OOO tomorrow'))
                 .then(room.user.say('user2', '@hubot OOO'))
                 .then(room.user.say('user2', '@hubot OOO 12/31/2016'));
@@ -34,7 +35,8 @@ describe('where-am-i handles *hubot where am i* or *hubot where is <user> <date>
 
         it('should find for "where is <user>"', function () {
             return room.user.say('user1', '@hubot where is @user2').then(function () {
-                expect(room.messages.slice(-3)).to.deep.equal([
+                expect(room.messages.slice(-4)).to.deep.equal([
+                    [ 'user1', '@hubot where is @user2' ],
                     [ 'hubot', '@user1 *['+util.today+']* *user2* is _OOO ..._' ],
                     [ 'hubot', '@user1 *['+util.tomorrow+']* *user2* is _OOO ..._' ],
                     [ 'hubot', '@user1 *[12/31/2016]* *user2* is _OOO ..._' ]

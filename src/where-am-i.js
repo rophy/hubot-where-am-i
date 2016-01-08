@@ -28,6 +28,7 @@
 var _ = require('lodash');
 var params = require('../util/params');
 var brain = require('../util/brain');
+var moment = require('moment');
 
 module.exports = function (robot) {
 
@@ -114,10 +115,9 @@ module.exports = function (robot) {
         _.forEach(users, function (user) {
             var data = robot.brain.get(user) || {};
             _.forEach(data, function (obj) {
-                if (!date || obj.date === date.format('MM/DD/YYYY')) {
+                if ( (moment(obj.date, 'MM-DD-YYYY').isSameOrAfter(params.today())) &&
+                    (!date || obj.date === date.format('MM/DD/YYYY')) ) {
                     response.push(formatDisplay(obj));
-                    // found = true;
-                    // res.reply(formatDisplay(obj));
                 }
             });
         });
