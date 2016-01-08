@@ -1,7 +1,7 @@
 {
   "name": "hubot-where-am-i",
   "description": "Hubot for tracking OOO, WFH, etc.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": " <johnkchiu@yahoo.com>",
   "license": "MIT",
   "keywords": "hubot, hubot-scripts",
