@@ -20,7 +20,7 @@ describe('where-am-i handles *hubot clear <date>* command', function () {
         beforeEach(function() {
             return room.user.say('johnkchiu', '@hubot OOO')
                 .then(room.user.say('johnkchiu', '@hubot OOO tomorrow'))
-                .then(room.user.say('johnkchiu', '@hubot OOO 12/31/2016'));
+                .then(room.user.say('johnkchiu', '@hubot OOO 12/31/2020'));
         });
 
         it('should clear for "clear" (no date)', function () {
@@ -53,13 +53,13 @@ describe('where-am-i handles *hubot clear <date>* command', function () {
             });
         });
 
-        it('should clear for "clear 12/31/2016" (specific date)', function () {
-            expect(room.robot.brain.get('johnkchiu')['12/31/2016']).is.not.empty;
-            return room.user.say('johnkchiu', '@hubot clear 12/31/2016').then(function () {
+        it('should clear for "clear 12/31/2020" (specific date)', function () {
+            expect(room.robot.brain.get('johnkchiu')['12/31/2020']).is.not.empty;
+            return room.user.say('johnkchiu', '@hubot clear 12/31/2020').then(function () {
                 expect(util.getLastResponse(room)).to.deep.equal(
-                    [ 'hubot', '@johnkchiu ~*[12/31/2016]* *johnkchiu* is _OOO ..._~' ]
+                    [ 'hubot', '@johnkchiu ~*[12/31/2020]* *johnkchiu* is _OOO ..._~' ]
                 );
-                expect(room.robot.brain.get('johnkchiu')['12/31/2016']).is.empty;
+                expect(room.robot.brain.get('johnkchiu')['12/31/2020']).is.empty;
             });
         });
 

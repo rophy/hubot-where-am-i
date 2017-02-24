@@ -22,7 +22,7 @@ describe('where-am-i handles *hubot where am i* or *hubot where is <user> <date>
                 .then(room.user.say('user2', '@hubot OOO 1/1/2000'))
                 .then(room.user.say('user2', '@hubot OOO tomorrow'))
                 .then(room.user.say('user2', '@hubot OOO'))
-                .then(room.user.say('user2', '@hubot OOO 12/31/2016'));
+                .then(room.user.say('user2', '@hubot OOO 12/31/2020'));
         });
 
         it('should find for "where am i"', function () {
@@ -39,7 +39,7 @@ describe('where-am-i handles *hubot where am i* or *hubot where is <user> <date>
                     [ 'user1', '@hubot where is @user2' ],
                     [ 'hubot', '@user1 *['+util.today+']* *user2* is _OOO ..._' ],
                     [ 'hubot', '@user1 *['+util.tomorrow+']* *user2* is _OOO ..._' ],
-                    [ 'hubot', '@user1 *[12/31/2016]* *user2* is _OOO ..._' ]
+                    [ 'hubot', '@user1 *[12/31/2020]* *user2* is _OOO ..._' ]
                 ]);
             });
         });
@@ -60,10 +60,10 @@ describe('where-am-i handles *hubot where am i* or *hubot where is <user> <date>
             });
         });
 
-        it('should find for "where is <user> 12/31/2016" (specific date)', function () {
-            return room.user.say('user1', '@hubot where is @user2 12/31/2016').then(function () {
+        it('should find for "where is <user> 12/31/2020" (specific date)', function () {
+            return room.user.say('user1', '@hubot where is @user2 12/31/2020').then(function () {
                 expect(util.getLastResponse(room)).to.deep.equal(
-                    [ 'hubot', '@user1 *[12/31/2016]* *user2* is _OOO ..._' ]
+                    [ 'hubot', '@user1 *[12/31/2020]* *user2* is _OOO ..._' ]
                 );
             });
         });

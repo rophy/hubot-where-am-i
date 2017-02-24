@@ -52,12 +52,12 @@ describe('where-am-i handles *hubot (ooo|wfh|pto) <date> <message>* command', fu
         });
     });
 
-    it('should add for "OOO 12/31/2016" (specific date)', function () {
-        return room.user.say('johnkchiu', '@hubot OOO 12/31/2016').then(function () {
+    it('should add for "OOO 12/31/2020" (specific date)', function () {
+        return room.user.say('johnkchiu', '@hubot OOO 12/31/2020').then(function () {
             expect(util.getLastResponse(room)).to.deep.equal(
-                [ 'hubot', '@johnkchiu *[12/31/2016]* *johnkchiu* is _OOO ..._' ]
+                [ 'hubot', '@johnkchiu *[12/31/2020]* *johnkchiu* is _OOO ..._' ]
             );
-            expect(room.robot.brain.get('johnkchiu')['12/31/2016']).is.not.empty;
+            expect(room.robot.brain.get('johnkchiu')['12/31/2020']).is.not.empty;
         });
     });
 
