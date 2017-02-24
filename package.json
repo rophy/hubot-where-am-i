@@ -1,16 +1,16 @@
 {
   "name": "hubot-where-am-i",
   "description": "Hubot for tracking OOO, WFH, etc.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": " <johnkchiu@yahoo.com>",
   "license": "MIT",
   "keywords": "hubot, hubot-scripts",
   "repository": {
     "type": "git",
-    "url": "git://github.com/hubot-scripts/hubot-where-am-i.git"
+    "url": "git://github.com/johnkchiu/hubot-where-am-i.git"
   },
   "bugs": {
-    "url": "https://github.com/hubot-scripts/hubot-where-am-i/issues"
+    "url": "https://github.com/johnkchiu/hubot-where-am-i/issues"
   },
   "dependencies": {
     "lodash": "^3.10.1",
