@@ -12,10 +12,10 @@
 // Commands:
 //   _<date>_ - It can be `today`, `tomorrow` or `MM/DD/YYYY`..
 //   _<user>_ - It can be `everyone` or `@<username`.
-//   *hubot OOO|WFH|PTO <date> <message>* - Sets your out of office.  <date> is optional and defaults to `today`.  <message> are optional.
-//   *hubot clear <date>* - Clears your out of office.  <date> is optional and defaults to `today`.
-//   *hubot where am i* - Prints your out of office dates.
-//   *hubot where is <user> <date>* - Prints <user>'s out of office.  <date> is optional and defaults to all dates.
+//   hubot OOO|WFH <date> <message> - Sets your out of office.  <date> is optional and defaults to `today`.  <message> are optional.
+//   hubot clear <date> - Clears your out of office.  <date> is optional and defaults to `today`.
+//   hubot where am i - Prints your out of office dates.
+//   hubot where is <user> <date> - Prints <user>'s out of office.  <date> is optional and defaults to all dates.
 //
 // Notes:
 //   <optional notes required for the script>
@@ -37,7 +37,7 @@ module.exports = function (robot) {
     }
 
     // Handles `(wfh|pto|ooo) <date> <message>`
-    robot.respond(/(wfh|pto|ooo)[\s]*(.*)/i, function (res) {
+    robot.respond(/(wfh|ooo)[\s]*(.*)/i, function (res) {
         var user = res.message.user.name;
         var reason = res.match[1].toUpperCase();
         var date = params.resolveDate(res.match[2]) || params.today();
